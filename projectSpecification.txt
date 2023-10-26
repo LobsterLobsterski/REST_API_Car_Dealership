@@ -1,0 +1,46 @@
+we are making a rest api with a database
+a car dealership:
+- we have cars in the dealership
+- cars have the following info describing them:
+	- name
+	- manufacture date
+	- fuel consumption
+	- horsepower
+	- manufacturer
+	- fuel type
+- we also hold manufacturer info which includes:
+	- name
+	- country of origin
+
+we need to be able to: c r u d DATABASE
+- create new entries
+- retreive existing data
+	- multiple
+		- by tags like manufacture date, fuel consumption, horsepower, manufacturer
+	- singular
+- update existing data
+	- full overwrite
+	- partial update
+- delete data
+
+we need to follow the layer system:
+presentation 	- expose data from service to the user
+service 	- use functionality of the persistance layer to solve problems our specification dictates
+persistance 	- handles interactions with the db, works with entities
+
+repositories, DAOs, services
+
+important annotations:
+rest controler
+---mapping
+spring boot application
+spring boot test
+dirties context
+extends(spring boot application)
+component
+bean
+config
+service
+autowire
+log
+

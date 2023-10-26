@@ -1,3 +1,3 @@
 My first semi-independent spring boot project.
 
-A car dealership
+A simple REST API for a car dealership.

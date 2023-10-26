@@ -15,7 +15,7 @@ public class CarDto {
     //entities to the user
     private Long id;
 
-    private String name;
+    private String carName;
     private Integer yearOfProduction;
     private Float fuelConsumption;
     private Integer horsepower;

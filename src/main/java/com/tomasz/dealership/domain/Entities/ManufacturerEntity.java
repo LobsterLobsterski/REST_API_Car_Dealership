@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name="cars")
+@Table(name="manufacturers")
 public class ManufacturerEntity {
     @Id
-    private String name;
+    private String manufacturerName;
     private String countryOfOrigin;
 }

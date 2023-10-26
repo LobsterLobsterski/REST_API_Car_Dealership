@@ -11,8 +11,9 @@ public class CarMapper implements Mapper<CarEntity, CarDto> {
     public CarDto mapTo(CarEntity carEntity) {
         return CarDto.builder()
                 .id(carEntity.getId())
-                .name(carEntity.getName())
+                .carName(carEntity.getCarName())
                 .yearOfProduction(carEntity.getYearOfProduction())
+                .fuelConsumption(carEntity.getFuelConsumption())
                 .horsepower(carEntity.getHorsepower())
                 .manufacturer(carEntity.getManufacturer())
                 .build();
@@ -22,8 +23,9 @@ public class CarMapper implements Mapper<CarEntity, CarDto> {
     public CarEntity mapFrom(CarDto carDto) {
         return CarEntity.builder()
                 .id(carDto.getId())
-                .name(carDto.getName())
+                .carName(carDto.getCarName())
                 .yearOfProduction(carDto.getYearOfProduction())
+                .fuelConsumption(carDto.getFuelConsumption())
                 .horsepower(carDto.getHorsepower())
                 .manufacturer(carDto.getManufacturer())
                 .build();

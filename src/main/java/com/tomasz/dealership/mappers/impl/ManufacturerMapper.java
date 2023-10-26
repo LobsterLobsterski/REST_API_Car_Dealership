@@ -10,7 +10,7 @@ public class ManufacturerMapper implements Mapper<ManufacturerEntity, Manufactur
     @Override
     public ManufacturerDto mapTo(ManufacturerEntity manufacturerEntity) {
         return ManufacturerDto.builder()
-                .name(manufacturerEntity.getName())
+                .name(manufacturerEntity.getManufacturerName())
                 .countryOfOrigin(manufacturerEntity.getCountryOfOrigin())
                 .build();
     }
@@ -18,7 +18,7 @@ public class ManufacturerMapper implements Mapper<ManufacturerEntity, Manufactur
     @Override
     public ManufacturerEntity mapFrom(ManufacturerDto manufacturerDto) {
         return ManufacturerEntity.builder()
-                .name(manufacturerDto.getName())
+                .manufacturerName(manufacturerDto.getName())
                 .countryOfOrigin(manufacturerDto.getCountryOfOrigin())
                 .build();
     }

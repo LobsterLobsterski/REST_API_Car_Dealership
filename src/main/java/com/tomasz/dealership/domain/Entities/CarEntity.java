@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,17 +14,18 @@ import java.util.Date;
 @Table(name="cars")
 public class CarEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "car_id_seq")
     private Long id;
 
-    private String name;
+    //can't have columns of the same name even in different tables
+    private String carName;
     private Integer yearOfProduction;
     private Float fuelConsumption;
     private Integer horsepower;
     //enum fuel type
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "name")
+    @JoinColumn(name = "manufacturer_name")
     private ManufacturerEntity manufacturer;
 
 }

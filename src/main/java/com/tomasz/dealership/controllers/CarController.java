@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 public class CarController {
 
@@ -23,13 +25,19 @@ public class CarController {
 
     @PostMapping(path = "/cars")
     public ResponseEntity<CarDto> createCar(@RequestBody CarDto carDto){
-        System.out.println("gotten car dto:"+carDto.toString());
         CarEntity carEntity = carMapper.mapFrom(carDto);
-        System.out.println("converted entity:"+carEntity.toString());
         CarEntity saved = carService.save(carEntity);
-        System.out.println("saved entity:"+saved.toString());
         CarDto returnedDto = carMapper.mapTo(saved);
-        System.out.println("returned dto:"+returnedDto.toString());
         return new ResponseEntity<>(returnedDto, HttpStatus.CREATED);
+    }
+
+    @GetMapping(path = "/cars/{id}")
+    public ResponseEntity<CarDto> getOneCar(@PathVariable Long id){
+        Optional<CarEntity> retrieved = carService.findOne(id);
+        if (retrieved.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        CarDto carDto = carMapper.mapTo(retrieved.get());
+        return new ResponseEntity<>(carDto, HttpStatus.OK);
     }
 }

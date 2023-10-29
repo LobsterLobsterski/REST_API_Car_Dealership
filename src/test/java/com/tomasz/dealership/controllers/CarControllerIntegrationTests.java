@@ -74,4 +74,58 @@ public class CarControllerIntegrationTests {
                 MockMvcResultMatchers.jsonPath("$.manufacturer").value(manufacturer)
         );
     }
+
+    @Test
+    public void testThatGetOneCarSuccessfullyReturnsHttp200OkWhenExists() throws Exception {
+        ManufacturerEntity manufacturer = TestDataUtil.createManufacturerEntityA();
+        CarEntity carEntity = TestDataUtil.createCarEntityA(manufacturer);
+        carService.save(carEntity);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/cars/"+carEntity.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testThatGetOneCarSuccessfullyReturnsHttp404WhenDesntExist() throws Exception {
+        ManufacturerEntity manufacturer = TestDataUtil.createManufacturerEntityA();
+        CarEntity carEntity = TestDataUtil.createCarEntityA(manufacturer);
+        //carService.save(carEntity);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/cars/"+carEntity.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
+    @Test
+    public void testThatGetOneCarSuccessfulyReturnsACar() throws Exception {
+        ManufacturerEntity manufacturer = TestDataUtil.createManufacturerEntityA();
+        CarEntity carEntity = TestDataUtil.createCarEntityA(manufacturer);
+        carService.save(carEntity);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/cars/"+carEntity.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.carName").value(carEntity.getCarName())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.yearOfProduction").value(carEntity.getYearOfProduction())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.yearOfProduction").value(carEntity.getYearOfProduction())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.fuelConsumption").value(carEntity.getFuelConsumption())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.horsepower").value(carEntity.getHorsepower())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.manufacturer").value(manufacturer)
+        );
+    }
 }

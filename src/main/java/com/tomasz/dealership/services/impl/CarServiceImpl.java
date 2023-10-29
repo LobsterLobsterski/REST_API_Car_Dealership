@@ -3,6 +3,8 @@ package com.tomasz.dealership.services.impl;
 import com.tomasz.dealership.domain.Entities.CarEntity;
 import com.tomasz.dealership.repositories.CarRepository;
 import com.tomasz.dealership.services.CarService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -28,5 +30,10 @@ public class CarServiceImpl implements CarService {
             return Optional.empty();
         }
         return carRepository.findById(id);
+    }
+
+    @Override
+    public Page<CarEntity> findAll(Pageable pageable) {
+        return carRepository.findAll(pageable);
     }
 }

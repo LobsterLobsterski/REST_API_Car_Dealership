@@ -4,10 +4,13 @@ import com.tomasz.dealership.domain.DTO.CarDto;
 import com.tomasz.dealership.domain.Entities.CarEntity;
 import com.tomasz.dealership.mappers.impl.CarMapper;
 import com.tomasz.dealership.services.CarService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -40,4 +43,13 @@ public class CarController {
         CarDto carDto = carMapper.mapTo(retrieved.get());
         return new ResponseEntity<>(carDto, HttpStatus.OK);
     }
+
+    @GetMapping(path = "/cars")
+    public Page<CarDto> getAllCars(Pageable pageable){
+        Page<CarEntity> retrieved = carService.findAll(pageable);
+        return retrieved.map(carMapper::mapTo);
+
+
+    }
+
 }

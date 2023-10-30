@@ -20,7 +20,6 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarEntity save(CarEntity carEntity) {
-//        carEntity.setId(id);
         return carRepository.save(carEntity);
     }
 
@@ -36,4 +35,16 @@ public class CarServiceImpl implements CarService {
     public Page<CarEntity> findAll(Pageable pageable) {
         return carRepository.findAll(pageable);
     }
+
+    @Override
+    public Optional<CarEntity> fullUpdate(Long id, CarEntity carEntity) {
+        if (!carRepository.existsById(id)){
+            return Optional.empty();
+        }
+        carEntity.setId(id);
+        CarEntity updated = carRepository.save(carEntity);
+        return Optional.of(updated);
+
+    }
+
 }

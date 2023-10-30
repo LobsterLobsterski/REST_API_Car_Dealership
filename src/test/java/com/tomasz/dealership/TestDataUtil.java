@@ -17,10 +17,28 @@ public class TestDataUtil {
                 .build();
     }
 
+    public static CarEntity createCarEntityB(final ManufacturerEntity manufacturer) {
+        return CarEntity.builder()
+                .id(2L)
+                .carName("Mustang")
+                .yearOfProduction(1969)
+                .fuelConsumption(16.3f)
+                .horsepower(335)
+                .manufacturer(manufacturer)
+                .build();
+    }
+
 
     public static ManufacturerEntity createManufacturerEntityA() {
         return ManufacturerEntity.builder()
                 .manufacturerName("Dodge")
+                .countryOfOrigin("USA")
+                .build();
+    }
+
+    public static ManufacturerEntity createManufacturerEntityB() {
+        return ManufacturerEntity.builder()
+                .manufacturerName("Ford")
                 .countryOfOrigin("USA")
                 .build();
     }

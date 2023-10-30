@@ -52,4 +52,15 @@ public class CarController {
 
     }
 
+    @PutMapping(path = "/cars/{id}")
+    public ResponseEntity<CarDto> fullUpdate(@PathVariable Long id, @RequestBody CarDto carDto){
+        CarEntity carEntity = carMapper.mapFrom(carDto);
+        Optional<CarEntity> response = carService.fullUpdate(id, carEntity);
+
+        if (response.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(carMapper.mapTo(response.get()), HttpStatus.OK);
+    }
+
 }

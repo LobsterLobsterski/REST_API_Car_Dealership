@@ -165,4 +165,73 @@ public class CarControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatFullUpdateCarSuccessfullyReturnsHttp200WhenExists() throws Exception {
+        ManufacturerEntity manufacturer = TestDataUtil.createManufacturerEntityA();
+        CarEntity carEntity = TestDataUtil.createCarEntityA(manufacturer);
+        carService.save(carEntity);
+
+        ManufacturerEntity manufacturer2 = TestDataUtil.createManufacturerEntityB();
+        CarEntity carEntity2 = TestDataUtil.createCarEntityB(manufacturer2);
+        String updatingJson = objectMapper.writeValueAsString(carEntity2);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/cars/"+carEntity.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatingJson)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testThatFullUpdateCarSuccessfullyReturnsHttp404WhenDoesntExists() throws Exception {
+        ManufacturerEntity manufacturer = TestDataUtil.createManufacturerEntityA();
+        CarEntity carEntity = TestDataUtil.createCarEntityA(manufacturer);
+        //carService.save(carEntity);
+
+        ManufacturerEntity manufacturer2 = TestDataUtil.createManufacturerEntityB();
+        CarEntity carEntity2 = TestDataUtil.createCarEntityB(manufacturer2);
+        String updatingJson = objectMapper.writeValueAsString(carEntity2);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/cars/"+carEntity.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatingJson)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
+    @Test
+    public void testThatFullUpdateCarSuccessfullyReturnsUpdatedCar() throws Exception {
+        ManufacturerEntity manufacturer = TestDataUtil.createManufacturerEntityA();
+        CarEntity carEntity = TestDataUtil.createCarEntityA(manufacturer);
+        carService.save(carEntity);
+
+        ManufacturerEntity manufacturer2 = TestDataUtil.createManufacturerEntityB();
+        CarEntity carEntity2 = TestDataUtil.createCarEntityB(manufacturer2);
+        carEntity2.setId(carEntity.getId());
+        String updatingJson = objectMapper.writeValueAsString(carEntity2);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/cars/"+carEntity.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatingJson)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.carName").value(carEntity2.getCarName())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.yearOfProduction").value(carEntity2.getYearOfProduction())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.yearOfProduction").value(carEntity2.getYearOfProduction())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.fuelConsumption").value(carEntity2.getFuelConsumption())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.horsepower").value(carEntity2.getHorsepower())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.manufacturer").value(manufacturer2)
+        );
+    }
 }

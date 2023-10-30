@@ -15,4 +15,6 @@ public interface CarService {
     Optional<CarEntity> findOne(Long id);
 
     Page<CarEntity> findAll(Pageable pageable);
+
+    Optional<CarEntity> fullUpdate(Long id, CarEntity carEntity);
 }

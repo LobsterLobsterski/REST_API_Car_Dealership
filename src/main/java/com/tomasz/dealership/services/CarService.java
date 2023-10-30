@@ -17,4 +17,6 @@ public interface CarService {
     Page<CarEntity> findAll(Pageable pageable);
 
     Optional<CarEntity> fullUpdate(Long id, CarEntity carEntity);
+
+    Optional<CarEntity> partialUpdate(Long id, CarEntity carEntity);
 }

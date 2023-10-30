@@ -234,4 +234,73 @@ public class CarControllerIntegrationTests {
                 MockMvcResultMatchers.jsonPath("$.manufacturer").value(manufacturer2)
         );
     }
+
+    @Test
+    public void testThatPartialUpdateCarSuccessfullyReturnsHttp200WhenExists() throws Exception {
+        ManufacturerEntity manufacturer = TestDataUtil.createManufacturerEntityA();
+        CarEntity carEntity = TestDataUtil.createCarEntityA(manufacturer);
+        carService.save(carEntity);
+
+        CarEntity carEntity2 = TestDataUtil.createCarEntityA(manufacturer);
+        carEntity2.setCarName("UPDATED");
+        String updatingJson = objectMapper.writeValueAsString(carEntity2);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.patch("/cars/"+carEntity.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatingJson)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testThatPartialUpdateCarSuccessfullyReturnsHttp404WhenDoesntExists() throws Exception {
+        ManufacturerEntity manufacturer = TestDataUtil.createManufacturerEntityA();
+        CarEntity carEntity = TestDataUtil.createCarEntityA(manufacturer);
+        //carService.save(carEntity);
+
+        CarEntity carEntity2 = TestDataUtil.createCarEntityA(manufacturer);
+        carEntity2.setCarName("UPDATED");
+        String updatingJson = objectMapper.writeValueAsString(carEntity2);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.patch("/cars/"+carEntity.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatingJson)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
+    @Test
+    public void testThatPartialUpdateCarSuccessfullyReturnsUpdatedCar() throws Exception {
+        ManufacturerEntity manufacturer = TestDataUtil.createManufacturerEntityA();
+        CarEntity carEntity = TestDataUtil.createCarEntityA(manufacturer);
+        carService.save(carEntity);
+
+        CarEntity carEntity2 = TestDataUtil.createCarEntityA(manufacturer);
+        carEntity2.setCarName("UPDATED");
+        String updatingJson = objectMapper.writeValueAsString(carEntity2);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.patch("/cars/"+carEntity.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatingJson)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.carName").value(carEntity2.getCarName())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.yearOfProduction").value(carEntity2.getYearOfProduction())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.yearOfProduction").value(carEntity2.getYearOfProduction())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.fuelConsumption").value(carEntity2.getFuelConsumption())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.horsepower").value(carEntity2.getHorsepower())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.manufacturer").value(carEntity2.getManufacturer())
+        );
+    }
 }

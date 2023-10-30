@@ -47,4 +47,33 @@ public class CarServiceImpl implements CarService {
 
     }
 
+    @Override
+    public Optional<CarEntity> partialUpdate(Long id, CarEntity carEntity) {
+        if (!carRepository.existsById(id)){
+            return Optional.empty();
+        }
+        Optional<CarEntity> retrieved = carRepository.findById(id);
+        CarEntity retrievedCar = retrieved.get();
+
+        if (carEntity.getCarName() != null){
+            retrievedCar.setCarName(carEntity.getCarName());
+        }
+        if (carEntity.getYearOfProduction() != null){
+            retrievedCar.setYearOfProduction(carEntity.getYearOfProduction());
+        }
+        if (carEntity.getFuelConsumption() != null){
+            retrievedCar.setFuelConsumption(carEntity.getFuelConsumption());
+        }
+        if (carEntity.getHorsepower() != null){
+            retrievedCar.setHorsepower(carEntity.getHorsepower());
+        }
+
+        if (carEntity.getManufacturer() != null){
+            retrievedCar.setManufacturer(carEntity.getManufacturer());
+        }
+
+        CarEntity updated = carRepository.save(retrievedCar);
+        return Optional.of(updated);
+    }
+
 }

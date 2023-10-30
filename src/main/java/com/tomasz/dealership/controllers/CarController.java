@@ -63,4 +63,15 @@ public class CarController {
         return new ResponseEntity<>(carMapper.mapTo(response.get()), HttpStatus.OK);
     }
 
+    @PatchMapping(path = "/cars/{id}")
+    ResponseEntity<CarDto> partialUpdate(@PathVariable Long id, @RequestBody CarDto carDto){
+        CarEntity carEntity = carMapper.mapFrom(carDto);
+        Optional<CarEntity> response = carService.partialUpdate(id, carEntity);
+
+        if (response.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(carMapper.mapTo(response.get()), HttpStatus.OK);
+    }
+
 }

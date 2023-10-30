@@ -76,4 +76,9 @@ public class CarServiceImpl implements CarService {
         return Optional.of(updated);
     }
 
+    @Override
+    public void delete(Long id) {
+        carRepository.deleteById(id);
+    }
+
 }

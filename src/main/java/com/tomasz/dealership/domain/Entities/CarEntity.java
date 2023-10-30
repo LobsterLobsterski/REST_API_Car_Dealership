@@ -24,7 +24,7 @@ public class CarEntity {
     private Integer horsepower;
     //enum fuel type
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "manufacturer_name")
     private ManufacturerEntity manufacturer;
 

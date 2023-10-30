@@ -19,4 +19,6 @@ public interface CarService {
     Optional<CarEntity> fullUpdate(Long id, CarEntity carEntity);
 
     Optional<CarEntity> partialUpdate(Long id, CarEntity carEntity);
+
+    void delete(Long id);
 }

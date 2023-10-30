@@ -303,4 +303,54 @@ public class CarControllerIntegrationTests {
                 MockMvcResultMatchers.jsonPath("$.manufacturer").value(carEntity2.getManufacturer())
         );
     }
+
+    @Test
+    public void testThatDeleteCarCarSuccessfullyReturnsHttp204WhenExists() throws Exception {
+        ManufacturerEntity manufacturer = TestDataUtil.createManufacturerEntityA();
+        CarEntity carEntity = TestDataUtil.createCarEntityA(manufacturer);
+        carService.save(carEntity);
+
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/cars/"+carEntity.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNoContent()
+        );
+    }
+
+    @Test
+    public void testThatDeleteCarSuccessfullyReturnsHttp204WhenDoesntExists() throws Exception {
+        ManufacturerEntity manufacturer = TestDataUtil.createManufacturerEntityA();
+        CarEntity carEntity = TestDataUtil.createCarEntityA(manufacturer);
+        //carService.save(carEntity);
+
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/cars/"+carEntity.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNoContent()
+        );
+    }
+
+    @Test
+    public void testThatDeleteCarSuccessfullyDeletesCar() throws Exception {
+        ManufacturerEntity manufacturer = TestDataUtil.createManufacturerEntityA();
+        CarEntity carEntity = TestDataUtil.createCarEntityA(manufacturer);
+        carService.save(carEntity);
+
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/cars/"+carEntity.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/cars/"+carEntity.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+        );
+
+    }
 }

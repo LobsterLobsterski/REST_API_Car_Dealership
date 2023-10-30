@@ -53,7 +53,7 @@ public class CarController {
     }
 
     @PutMapping(path = "/cars/{id}")
-    public ResponseEntity<CarDto> fullUpdate(@PathVariable Long id, @RequestBody CarDto carDto){
+    public ResponseEntity<CarDto> fullCarUpdate(@PathVariable Long id, @RequestBody CarDto carDto){
         CarEntity carEntity = carMapper.mapFrom(carDto);
         Optional<CarEntity> response = carService.fullUpdate(id, carEntity);
 
@@ -64,7 +64,7 @@ public class CarController {
     }
 
     @PatchMapping(path = "/cars/{id}")
-    ResponseEntity<CarDto> partialUpdate(@PathVariable Long id, @RequestBody CarDto carDto){
+    public ResponseEntity<CarDto> partialCarUpdate(@PathVariable Long id, @RequestBody CarDto carDto){
         CarEntity carEntity = carMapper.mapFrom(carDto);
         Optional<CarEntity> response = carService.partialUpdate(id, carEntity);
 
@@ -72,6 +72,12 @@ public class CarController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(carMapper.mapTo(response.get()), HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/cars/{id}")
+    public ResponseEntity deleteCar(@PathVariable Long id){
+        carService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

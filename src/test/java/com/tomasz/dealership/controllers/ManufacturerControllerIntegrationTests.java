@@ -93,4 +93,17 @@ public class ManufacturerControllerIntegrationTests {
         ).andExpect(MockMvcResultMatchers.jsonPath("$.countryOfOrigin").value(manufacturerEntityA.getCountryOfOrigin())
         );
     }
+
+    @Test
+    public void testThatFindAllManufacturersReturnsCorrectManufacturers() throws Exception {
+        ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
+        manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/manufacturers")
+                .contentType(MediaType.APPLICATION_JSON)
+
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[0].name").value(manufacturerEntityA.getManufacturerName())
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.content[0].countryOfOrigin").value(manufacturerEntityA.getCountryOfOrigin())
+        );
+    }
 }

@@ -4,6 +4,8 @@ import com.tomasz.dealership.domain.DTO.ManufacturerDto;
 import com.tomasz.dealership.domain.Entities.ManufacturerEntity;
 import com.tomasz.dealership.repositories.ManufacturerRepository;
 import com.tomasz.dealership.services.ManufacturerService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -26,5 +28,10 @@ public class ManufacturerServiceImpl implements ManufacturerService {
     @Override
     public Optional<ManufacturerEntity> findOne(String manufacturerName) {
         return manufacturerRepository.findById(manufacturerName);
+    }
+
+    @Override
+    public Page<ManufacturerEntity> findAll(Pageable pageable) {
+        return manufacturerRepository.findAll(pageable);
     }
 }

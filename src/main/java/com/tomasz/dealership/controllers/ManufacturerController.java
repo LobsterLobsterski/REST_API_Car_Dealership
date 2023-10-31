@@ -4,6 +4,8 @@ import com.tomasz.dealership.domain.DTO.ManufacturerDto;
 import com.tomasz.dealership.domain.Entities.ManufacturerEntity;
 import com.tomasz.dealership.mappers.impl.ManufacturerMapper;
 import com.tomasz.dealership.services.ManufacturerService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,5 +37,11 @@ public class ManufacturerController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(manufacturerMapper.mapTo(result.get()), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/manufacturers")
+    public Page<ManufacturerDto> findAllManufacturers(Pageable pageable){
+        Page<ManufacturerEntity> result = manufacturerService.findAll(pageable);
+        return result.map(manufacturerMapper::mapTo);
     }
 }

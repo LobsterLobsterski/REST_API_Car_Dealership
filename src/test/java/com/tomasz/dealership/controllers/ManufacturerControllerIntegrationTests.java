@@ -44,4 +44,53 @@ public class ManufacturerControllerIntegrationTests {
         ).andExpect(MockMvcResultMatchers.status().isCreated()
         );
     }
+
+    @Test
+    public void testThatCreateManufacturerReturnsCreatedManufacturer() throws Exception {
+        ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
+        manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+        String jsonEntity = objectMapper.writeValueAsString(manufacturerEntityA);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/manufacturers/"+manufacturerEntityA.getManufacturerName())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonEntity)
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(manufacturerEntityA.getManufacturerName())
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.countryOfOrigin").value(manufacturerEntityA.getCountryOfOrigin())
+        );
+    }
+
+    @Test
+    public void testThatFindOneManufacturerReturnsHtml200WhenExists() throws Exception {
+        ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
+        manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/manufacturers/"+manufacturerEntityA.getManufacturerName())
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testThatFindOneManufacturerReturnsHtml404WhenDoesntExists() throws Exception {
+        ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
+        //manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/manufacturers/"+manufacturerEntityA.getManufacturerName())
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
+    @Test
+    public void testThatFindOneManufacturerReturnsCorrectManufacturer() throws Exception {
+        ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
+        manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/manufacturers/"+manufacturerEntityA.getManufacturerName())
+                .contentType(MediaType.APPLICATION_JSON)
+
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(manufacturerEntityA.getManufacturerName())
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.countryOfOrigin").value(manufacturerEntityA.getCountryOfOrigin())
+        );
+    }
 }

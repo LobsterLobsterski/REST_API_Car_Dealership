@@ -6,10 +6,9 @@ import com.tomasz.dealership.mappers.impl.ManufacturerMapper;
 import com.tomasz.dealership.services.ManufacturerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 public class ManufacturerController {
@@ -27,5 +26,14 @@ public class ManufacturerController {
         ManufacturerEntity manufacturerEntity = manufacturerMapper.mapFrom(manufacturer);
         ManufacturerEntity saved = manufacturerService.save(manufacturerName, manufacturerEntity);
         return new ResponseEntity<>(manufacturerMapper.mapTo(saved), HttpStatus.CREATED);
+    }
+
+    @GetMapping(path = "/manufacturers/{manufacturerName}")
+    public ResponseEntity<ManufacturerDto> findOneManufacturer(@PathVariable String manufacturerName){
+        Optional<ManufacturerEntity> result = manufacturerService.findOne(manufacturerName);
+        if (result.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(manufacturerMapper.mapTo(result.get()), HttpStatus.OK);
     }
 }

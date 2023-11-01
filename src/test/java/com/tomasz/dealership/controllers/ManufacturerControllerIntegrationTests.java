@@ -48,7 +48,7 @@ public class ManufacturerControllerIntegrationTests {
     @Test
     public void testThatCreateManufacturerReturnsCreatedManufacturer() throws Exception {
         ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
-        manufacturerService.saveUpdate(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+        manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
         String jsonEntity = objectMapper.writeValueAsString(manufacturerEntityA);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/manufacturers/"+manufacturerEntityA.getManufacturerName())
@@ -62,7 +62,7 @@ public class ManufacturerControllerIntegrationTests {
     @Test
     public void testThatFindOneManufacturerReturnsHtml200WhenExists() throws Exception {
         ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
-        manufacturerService.saveUpdate(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+        manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/manufacturers/"+manufacturerEntityA.getManufacturerName())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -84,7 +84,7 @@ public class ManufacturerControllerIntegrationTests {
     @Test
     public void testThatFindOneManufacturerReturnsCorrectManufacturer() throws Exception {
         ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
-        manufacturerService.saveUpdate(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+        manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/manufacturers/"+manufacturerEntityA.getManufacturerName())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -97,7 +97,7 @@ public class ManufacturerControllerIntegrationTests {
     @Test
     public void testThatFindAllManufacturersReturnsCorrectManufacturers() throws Exception {
         ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
-        manufacturerService.saveUpdate(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+        manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/manufacturers")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -110,12 +110,13 @@ public class ManufacturerControllerIntegrationTests {
     @Test
     public void testThatFullUpdateManufacturerReturnsHtml200WhenExists() throws Exception {
         ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
-        manufacturerService.saveUpdate(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+        manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
 
         ManufacturerEntity manufacturerEntityB = TestDataUtil.createManufacturerEntityB();
+        manufacturerEntityB.setCountryOfOrigin("UPDATED");
         String jsonEntity = objectMapper.writeValueAsString(manufacturerEntityB);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/manufacturers/"+manufacturerEntityA.getManufacturerName())
+        mockMvc.perform(MockMvcRequestBuilders.put("/manufacturers/"+manufacturerEntityA.getManufacturerName())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonEntity)
         ).andExpect(MockMvcResultMatchers.status().isOk()
@@ -123,30 +124,31 @@ public class ManufacturerControllerIntegrationTests {
     }
 
     @Test
-    public void testThatFullUpdateManufacturerReturnsHtml201WhenDoesntExists() throws Exception {
+    public void testThatFullUpdateManufacturerReturnsHtml404WhenDoesntExists() throws Exception {
         ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
-        manufacturerEntityA.setManufacturerName("UPDATED");
         //manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
-        manufacturerEntityA.setManufacturerName("UPDATED");
-        String jsonEntity = objectMapper.writeValueAsString(manufacturerEntityA);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/manufacturers/"+manufacturerEntityA.getManufacturerName())
+        ManufacturerEntity manufacturerEntityB = TestDataUtil.createManufacturerEntityB();
+        manufacturerEntityB.setCountryOfOrigin("UPDATED");
+        String jsonEntity = objectMapper.writeValueAsString(manufacturerEntityB);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/manufacturers/"+manufacturerEntityA.getManufacturerName())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonEntity)
-        ).andExpect(MockMvcResultMatchers.status().isCreated()
+        ).andExpect(MockMvcResultMatchers.status().isNotFound()
         );
     }
 
     @Test
     public void testThatFullUpdateManufacturerReturnsCorrectManufacturer() throws Exception {
         ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
-        manufacturerService.saveUpdate(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+        manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
 
         ManufacturerEntity manufacturerEntityB = TestDataUtil.createManufacturerEntityB();
         manufacturerEntityB.setCountryOfOrigin("UPDATED");
         String jsonEntity = objectMapper.writeValueAsString(manufacturerEntityB);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/manufacturers/"+manufacturerEntityA.getManufacturerName())
+        mockMvc.perform(MockMvcRequestBuilders.put("/manufacturers/"+manufacturerEntityA.getManufacturerName())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonEntity)
 
@@ -158,7 +160,7 @@ public class ManufacturerControllerIntegrationTests {
     @Test
     public void testThatPartialUpdateManufacturerReturnsHtml200WhenExists() throws Exception {
         ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
-        manufacturerService.saveUpdate(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+        manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
 
         ManufacturerEntity manufacturerEntityB = TestDataUtil.createManufacturerEntityB();
         manufacturerEntityB.setManufacturerName(null);
@@ -192,7 +194,7 @@ public class ManufacturerControllerIntegrationTests {
     @Test
     public void testThatPartialUpdateManufacturerReturnsCorrectManufacturer() throws Exception {
         ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
-        manufacturerService.saveUpdate(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+        manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
 
         ManufacturerEntity manufacturerEntityB = TestDataUtil.createManufacturerEntityB();
         manufacturerEntityB.setManufacturerName(null);

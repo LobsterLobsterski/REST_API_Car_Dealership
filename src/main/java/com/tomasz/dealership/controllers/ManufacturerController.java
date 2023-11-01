@@ -24,10 +24,10 @@ public class ManufacturerController {
     }
 
     @PostMapping(path = "/manufacturers/{manufacturerName}")
-    public ResponseEntity<ManufacturerDto> createUpdateManufacturer(@PathVariable String manufacturerName, @RequestBody ManufacturerDto manufacturer){
+    public ResponseEntity<ManufacturerDto> createManufacturer(@PathVariable String manufacturerName, @RequestBody ManufacturerDto manufacturer){
         ManufacturerEntity manufacturerEntity = manufacturerMapper.mapFrom(manufacturer);
-        ResponseEntity<ManufacturerEntity> response = manufacturerService.saveUpdate(manufacturerName, manufacturerEntity);
-        return new ResponseEntity<>(manufacturerMapper.mapTo(response.getBody()), response.getStatusCode());
+        ManufacturerEntity response = manufacturerService.save(manufacturerName, manufacturerEntity);
+        return new ResponseEntity<>(manufacturerMapper.mapTo(response), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/manufacturers/{manufacturerName}")
@@ -45,6 +45,16 @@ public class ManufacturerController {
         return result.map(manufacturerMapper::mapTo);
     }
 
+    @PutMapping(path = "/manufacturers/{manufacturerName}")
+    public ResponseEntity<ManufacturerDto> fullUpdate(@PathVariable String manufacturerName, @RequestBody ManufacturerDto manufacturerDto){
+        ManufacturerEntity manufacturerEntity = manufacturerMapper.mapFrom(manufacturerDto);
+        Optional<ManufacturerEntity> updatedManufacturer = manufacturerService.fullUpdate(manufacturerName, manufacturerEntity);
+        if (updatedManufacturer.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(manufacturerMapper.mapTo(updatedManufacturer.get()), HttpStatus.OK);
+    }
+
     @PatchMapping(path = "/manufacturers/{manufacturerName}")
     public ResponseEntity<ManufacturerDto> partialUpdate(@PathVariable String manufacturerName, @RequestBody ManufacturerDto manufacturerData){
         ManufacturerEntity manufacturer = manufacturerMapper.mapFrom(manufacturerData);
@@ -54,7 +64,5 @@ public class ManufacturerController {
         }
         return new ResponseEntity<>(manufacturerMapper.mapTo(updated.get()), HttpStatus.OK);
     }
-
-
     
 }

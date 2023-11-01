@@ -5,8 +5,6 @@ import com.tomasz.dealership.repositories.ManufacturerRepository;
 import com.tomasz.dealership.services.ManufacturerService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,12 +19,9 @@ public class ManufacturerServiceImpl implements ManufacturerService {
     }
 
     @Override
-    public ResponseEntity<ManufacturerEntity> saveUpdate(String manufacturerName, ManufacturerEntity manufacturer) {
+    public ManufacturerEntity save(String manufacturerName, ManufacturerEntity manufacturer) {
         manufacturer.setManufacturerName(manufacturerName);
-        if (!manufacturerRepository.existsById(manufacturerName)){
-            return new ResponseEntity<>(manufacturerRepository.save(manufacturer), HttpStatus.CREATED);
-        }
-        return new ResponseEntity<>(manufacturerRepository.save(manufacturer), HttpStatus.OK);
+        return manufacturerRepository.save(manufacturer);
 
     }
 

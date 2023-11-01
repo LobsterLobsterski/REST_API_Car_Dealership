@@ -16,4 +16,6 @@ public interface ManufacturerService {
     Optional<ManufacturerEntity> fullUpdate(String name, ManufacturerEntity manufacturer);
 
     Optional<ManufacturerEntity> partialUpdate(String name, ManufacturerEntity manufacturer);
+
+    void delete(String manufacturerName);
 }

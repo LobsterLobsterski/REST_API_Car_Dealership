@@ -34,7 +34,7 @@ public class ManufacturerControllerIntegrationTests {
     }
 
     @Test
-    public void testThatCreateManufacturerReturnsHtml201() throws Exception {
+    public void testThatCreateManufacturerReturnsHttp201() throws Exception {
         ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
         String jsonEntity = objectMapper.writeValueAsString(manufacturerEntityA);
 
@@ -60,7 +60,7 @@ public class ManufacturerControllerIntegrationTests {
     }
 
     @Test
-    public void testThatFindOneManufacturerReturnsHtml200WhenExists() throws Exception {
+    public void testThatFindOneManufacturerReturnsHttp200WhenExists() throws Exception {
         ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
         manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
 
@@ -71,7 +71,7 @@ public class ManufacturerControllerIntegrationTests {
     }
 
     @Test
-    public void testThatFindOneManufacturerReturnsHtml404WhenDoesntExists() throws Exception {
+    public void testThatFindOneManufacturerReturnsHttp404WhenDoesntExists() throws Exception {
         ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
         //manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
 
@@ -108,7 +108,7 @@ public class ManufacturerControllerIntegrationTests {
     }
 
     @Test
-    public void testThatFullUpdateManufacturerReturnsHtml200WhenExists() throws Exception {
+    public void testThatFullUpdateManufacturerReturnsHttp200WhenExists() throws Exception {
         ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
         manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
 
@@ -124,7 +124,7 @@ public class ManufacturerControllerIntegrationTests {
     }
 
     @Test
-    public void testThatFullUpdateManufacturerReturnsHtml404WhenDoesntExists() throws Exception {
+    public void testThatFullUpdateManufacturerReturnsHttp404WhenDoesntExists() throws Exception {
         ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
         //manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
 
@@ -156,9 +156,11 @@ public class ManufacturerControllerIntegrationTests {
         ).andExpect(MockMvcResultMatchers.jsonPath("$.countryOfOrigin").value(manufacturerEntityB.getCountryOfOrigin())
         );
     }
+    
+    
 
     @Test
-    public void testThatPartialUpdateManufacturerReturnsHtml200WhenExists() throws Exception {
+    public void testThatPartialUpdateManufacturerReturnsHttp200WhenExists() throws Exception {
         ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
         manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
 
@@ -175,7 +177,7 @@ public class ManufacturerControllerIntegrationTests {
     }
 
     @Test
-    public void testThatPartialUpdateManufacturerReturnsHtml404WhenDoesntExists() throws Exception {
+    public void testThatPartialUpdateManufacturerReturnsHttp404WhenDoesntExists() throws Exception {
         ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
         //manufacturerService.saveUpdate(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
 
@@ -208,6 +210,35 @@ public class ManufacturerControllerIntegrationTests {
         ).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(manufacturerEntityA.getManufacturerName())
         ).andExpect(MockMvcResultMatchers.jsonPath("$.countryOfOrigin").value(manufacturerEntityB.getCountryOfOrigin())
         );
+    }
+
+    @Test
+    public void testThatDeleteManufacturerReturnsHttp200() throws Exception {
+        ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
+        manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/manufacturers/"+manufacturerEntityA.getManufacturerName())
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testThatDeleteManufacturerDeletesmanufacturer() throws Exception {
+        ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
+        manufacturerService.save(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/manufacturers/"+manufacturerEntityA.getManufacturerName())
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isOk()
+        );
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/manufacturers/"+manufacturerEntityA.getManufacturerName())
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNotFound()
+        );
+
     }
 
 }

@@ -64,5 +64,11 @@ public class ManufacturerController {
         }
         return new ResponseEntity<>(manufacturerMapper.mapTo(updated.get()), HttpStatus.OK);
     }
+
+    @DeleteMapping(path = "/manufacturers/{manufacturerName}")
+    public ResponseEntity delete(@PathVariable String manufacturerName){
+        manufacturerService.delete(manufacturerName);
+        return new ResponseEntity(HttpStatus.OK);
+    }
     
 }

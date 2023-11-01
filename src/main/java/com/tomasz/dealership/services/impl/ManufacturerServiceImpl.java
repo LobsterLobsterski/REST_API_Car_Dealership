@@ -59,4 +59,9 @@ public class ManufacturerServiceImpl implements ManufacturerService {
         updated.setManufacturerName(name);
         return Optional.of(updated);
     }
+
+    @Override
+    public void delete(String manufacturerName) {
+        manufacturerRepository.deleteById(manufacturerName);
+    }
 }

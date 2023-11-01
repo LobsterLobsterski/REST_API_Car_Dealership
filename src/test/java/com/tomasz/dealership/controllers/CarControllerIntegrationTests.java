@@ -23,9 +23,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 public class CarControllerIntegrationTests {
 
-    private MockMvc mockMvc;
-    private ObjectMapper objectMapper;
-    private CarService carService;
+    private final MockMvc mockMvc;
+    private final ObjectMapper objectMapper;
+    private final CarService carService;
 
     @Autowired
     public CarControllerIntegrationTests(MockMvc mockMvc, CarService carService) {
@@ -324,7 +324,6 @@ public class CarControllerIntegrationTests {
         ManufacturerEntity manufacturer = TestDataUtil.createManufacturerEntityA();
         CarEntity carEntity = TestDataUtil.createCarEntityA(manufacturer);
         //carService.save(carEntity);
-
 
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/cars/"+carEntity.getId())

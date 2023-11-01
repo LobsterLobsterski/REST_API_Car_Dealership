@@ -24,10 +24,10 @@ public class ManufacturerController {
     }
 
     @PostMapping(path = "/manufacturers/{manufacturerName}")
-    public ResponseEntity<ManufacturerDto> createManufacturer(@PathVariable String manufacturerName, @RequestBody ManufacturerDto manufacturer){
+    public ResponseEntity<ManufacturerDto> createUpdateManufacturer(@PathVariable String manufacturerName, @RequestBody ManufacturerDto manufacturer){
         ManufacturerEntity manufacturerEntity = manufacturerMapper.mapFrom(manufacturer);
-        ManufacturerEntity saved = manufacturerService.save(manufacturerName, manufacturerEntity);
-        return new ResponseEntity<>(manufacturerMapper.mapTo(saved), HttpStatus.CREATED);
+        ResponseEntity<ManufacturerEntity> response = manufacturerService.saveUpdate(manufacturerName, manufacturerEntity);
+        return new ResponseEntity<>(manufacturerMapper.mapTo(response.getBody()), response.getStatusCode());
     }
 
     @GetMapping(path = "/manufacturers/{manufacturerName}")
@@ -44,4 +44,7 @@ public class ManufacturerController {
         Page<ManufacturerEntity> result = manufacturerService.findAll(pageable);
         return result.map(manufacturerMapper::mapTo);
     }
+
+
+    
 }

@@ -15,8 +15,7 @@ a car dealership:
 we need to be able to: c r u d DATABASE
 - create new entries
 - retreive existing data
-	- multiple
-		- by tags like manufacture date, fuel consumption, horsepower, manufacturer
+	- all
 	- singular
 - update existing data
 	- full overwrite
@@ -27,20 +26,3 @@ we need to follow the layer system:
 presentation 	- expose data from service to the user
 service 	- use functionality of the persistance layer to solve problems our specification dictates
 persistance 	- handles interactions with the db, works with entities
-
-repositories, DAOs, services
-
-important annotations:
-rest controler
----mapping
-spring boot application
-spring boot test
-dirties context
-extends(spring boot application)
-component
-bean
-config
-service
-autowire
-log
-

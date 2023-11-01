@@ -154,4 +154,58 @@ public class ManufacturerControllerIntegrationTests {
         ).andExpect(MockMvcResultMatchers.jsonPath("$.countryOfOrigin").value(manufacturerEntityB.getCountryOfOrigin())
         );
     }
+
+    @Test
+    public void testThatPartialUpdateManufacturerReturnsHtml200WhenExists() throws Exception {
+        ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
+        manufacturerService.saveUpdate(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+
+        ManufacturerEntity manufacturerEntityB = TestDataUtil.createManufacturerEntityB();
+        manufacturerEntityB.setManufacturerName(null);
+        manufacturerEntityB.setCountryOfOrigin("UPDATED");
+        String jsonEntity = objectMapper.writeValueAsString(manufacturerEntityB);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/manufacturers/"+manufacturerEntityA.getManufacturerName())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonEntity)
+        ).andExpect(MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testThatPartialUpdateManufacturerReturnsHtml404WhenDoesntExists() throws Exception {
+        ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
+        //manufacturerService.saveUpdate(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+
+        ManufacturerEntity manufacturerEntityB = TestDataUtil.createManufacturerEntityB();
+        manufacturerEntityB.setManufacturerName(null);
+        manufacturerEntityB.setCountryOfOrigin("UPDATED");
+        String jsonEntity = objectMapper.writeValueAsString(manufacturerEntityB);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/manufacturers/"+manufacturerEntityA.getManufacturerName())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonEntity)
+        ).andExpect(MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
+    @Test
+    public void testThatPartialUpdateManufacturerReturnsCorrectManufacturer() throws Exception {
+        ManufacturerEntity manufacturerEntityA = TestDataUtil.createManufacturerEntityA();
+        manufacturerService.saveUpdate(manufacturerEntityA.getManufacturerName(), manufacturerEntityA);
+
+        ManufacturerEntity manufacturerEntityB = TestDataUtil.createManufacturerEntityB();
+        manufacturerEntityB.setManufacturerName(null);
+        manufacturerEntityB.setCountryOfOrigin("UPDATED");
+        String jsonEntity = objectMapper.writeValueAsString(manufacturerEntityB);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/manufacturers/"+manufacturerEntityA.getManufacturerName())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonEntity)
+
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.name").value(manufacturerEntityA.getManufacturerName())
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.countryOfOrigin").value(manufacturerEntityB.getCountryOfOrigin())
+        );
+    }
+
 }

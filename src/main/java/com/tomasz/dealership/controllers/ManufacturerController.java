@@ -45,6 +45,16 @@ public class ManufacturerController {
         return result.map(manufacturerMapper::mapTo);
     }
 
+    @PatchMapping(path = "/manufacturers/{manufacturerName}")
+    public ResponseEntity<ManufacturerDto> partialUpdate(@PathVariable String manufacturerName, @RequestBody ManufacturerDto manufacturerData){
+        ManufacturerEntity manufacturer = manufacturerMapper.mapFrom(manufacturerData);
+        Optional<ManufacturerEntity> updated = manufacturerService.partialUpdate(manufacturerName, manufacturer);
+        if (updated.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(manufacturerMapper.mapTo(updated.get()), HttpStatus.OK);
+    }
+
 
     
 }

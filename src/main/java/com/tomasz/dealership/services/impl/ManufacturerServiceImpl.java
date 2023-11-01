@@ -1,6 +1,5 @@
 package com.tomasz.dealership.services.impl;
 
-import com.tomasz.dealership.domain.DTO.ManufacturerDto;
 import com.tomasz.dealership.domain.Entities.ManufacturerEntity;
 import com.tomasz.dealership.repositories.ManufacturerRepository;
 import com.tomasz.dealership.services.ManufacturerService;
@@ -50,5 +49,19 @@ public class ManufacturerServiceImpl implements ManufacturerService {
         ManufacturerEntity updated = manufacturerRepository.save(manufacturer);
         return Optional.of(updated);
 
+    }
+
+    @Override
+    public Optional<ManufacturerEntity> partialUpdate(String name, ManufacturerEntity manufacturerData) {
+        if (!manufacturerRepository.existsById(name)){
+            return Optional.empty();
+        }
+        ManufacturerEntity manufacturer = manufacturerRepository.findById(name).get();
+        if (!manufacturerData.getCountryOfOrigin().isBlank()){
+            manufacturer.setCountryOfOrigin(manufacturerData.getCountryOfOrigin());
+        }
+        ManufacturerEntity updated = manufacturerRepository.save(manufacturer);
+        updated.setManufacturerName(name);
+        return Optional.of(updated);
     }
 }

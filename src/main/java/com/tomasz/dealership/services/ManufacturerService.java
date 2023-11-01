@@ -15,4 +15,6 @@ public interface ManufacturerService {
     Page<ManufacturerEntity> findAll(Pageable pageable);
 
     Optional<ManufacturerEntity> fullUpdate(String name, ManufacturerEntity manufacturer);
+
+    Optional<ManufacturerEntity> partialUpdate(String name, ManufacturerEntity manufacturer);
 }

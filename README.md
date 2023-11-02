@@ -27,7 +27,6 @@ git clone https://github.com/yourusername/car-dealership-api.git
 3. **Build and Run the Application:**
   
 5. **Explore the API:**
-- Access Swagger documentation at `http://localhost:8080/swagger-ui.html` to understand and test available endpoints.
 - Use tools like Postman or `curl` commands for API testing.
 
 ## Contributing
